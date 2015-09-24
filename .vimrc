@@ -27,6 +27,6 @@ nnoremap <F8> gt
 inoremap <F8> <Esc>gti
 vnoremap <F8> gt
 "goto prev tab
-nnoremap <F9> gT
-inoremap <F9> <Esc>gTi
-vnoremap <F9> gT
+nnoremap <F7> gT
+inoremap <F7> <Esc>gTi
+vnoremap <F7> gT
