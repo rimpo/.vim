@@ -7,6 +7,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'rking/ag.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'git://github.com/tpope/vim-sensible.git'
+Plugin 'fatih/vim-go'
+Plugin 'git://github.com/Valloric/YouCompleteMe.git'
 call vundle#end()
 
 syntax on
@@ -36,3 +38,15 @@ vnoremap <C-l> gt
 nnoremap <C-h> gT
 inoremap <C-h> <Esc>gT
 vnoremap <C-h> gT
+
+"save file shortcut
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>
+vnoremap <C-s> :w<CR>
+
+"highlight the search
+set hlsearch
+"clear highlighted search
+nnoremap <leader>c :let @/=""<CR>
+
+
