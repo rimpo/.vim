@@ -22,11 +22,11 @@ set runtimepath^=~/.vim/bundle/ag
 
 
 "-- tab settings -- 
-"goto next tab
-nnoremap <F8> gt
-inoremap <F8> <Esc>gt
-vnoremap <F8> gt
+"goto next tab - note - over writing refresh
+nnoremap <C-l> gt
+inoremap <C-l> <Esc>gt
+vnoremap <C-l> gt
 "goto prev tab
-nnoremap <F7> gT
-inoremap <F7> <Esc>gT
-vnoremap <F7> gT
+nnoremap <C-h> gT
+inoremap <C-h> <Esc>gT
+vnoremap <C-h> gT
