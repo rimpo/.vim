@@ -1,6 +1,16 @@
-execute pathogen#infect()
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'rking/ag.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'git://github.com/tpope/vim-sensible.git'
+call vundle#end()
+
 syntax on
-filetype on
+filetype plugin indent on      " Automatically detect file types.
 
 set rnu
 set nu
@@ -16,10 +26,6 @@ nnoremap <F12> :YcmCompleter GoToDeclaration<CR>
 
 "Control P
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn|pyc)$'
-
-"ag
-set runtimepath^=~/.vim/bundle/ag
-
 
 "-- tab settings -- 
 "goto next tab - note - over writing refresh
