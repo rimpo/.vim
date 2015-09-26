@@ -47,6 +47,6 @@ vnoremap <C-s> :w<CR>
 "highlight the search
 set hlsearch
 "clear highlighted search
-nnoremap <leader>c :let @/=""<CR>
+nnoremap <Esc> :let @/=""<CR>
 
 
