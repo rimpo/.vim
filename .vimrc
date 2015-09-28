@@ -4,12 +4,13 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-sensible'
 Plugin 'rking/ag.vim'
 Plugin 'kien/ctrlp.vim'
-Plugin 'git://github.com/tpope/vim-sensible.git'
 Plugin 'fatih/vim-go'
 Plugin 'git://github.com/Valloric/YouCompleteMe.git'
 Plugin 'scrooloose/syntastic'
+Plugin 'Rename'
 call vundle#end()
 
 syntax on
@@ -18,7 +19,7 @@ filetype plugin indent on      " Automatically detect file types.
 set rnu
 set nu
 set nolist
-set guifont=DejaVu\ Sans\ Mono\ 12
+set guifont=DejaVu\ Sans\ Mono\ 14
 
 autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
 
@@ -28,15 +29,15 @@ let mapleader=","
 nnoremap <F12> :YcmCompleter GoToDeclaration<CR>
 
 "Syntastic - python syntax checker
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 1
-
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 1
+let g:syntastic_python_flake8_args="--ignore=W191,E501,E302"
 
 "Control P
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn|pyc)$'
