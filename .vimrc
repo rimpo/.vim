@@ -78,6 +78,11 @@ set noswapfile
 set hlsearch
 "clear highlighted search
 nnoremap <Esc> :let @/=""<CR>
-
+"nnoremap <Esc><Esc> :nohls<CR>
+noremap <silent><Leader>/ :nohls<CR>
 
 let python_highlight_all = 1
+
+"Improve up/down movement on wrapped lines
+nnoremap j gj
+nnoremap k gk
