@@ -19,7 +19,7 @@ filetype plugin indent on      " Automatically detect file types.
 set rnu
 set nu
 set nolist
-set guifont=DejaVu\ Sans\ Mono\ 14
+set guifont=DejaVu\ Sans\ Mono\ 12
 
 autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
 
@@ -41,6 +41,8 @@ let g:syntastic_python_flake8_args="--ignore=W191,E501,E302"
 
 "Control P
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn|pyc)$'
+set wildignore+=*.pyc
+set wildignore+=*.tgz
 
 "-- tab settings -- 
 "goto next tab - note - over writing refresh
@@ -60,6 +62,16 @@ vnoremap <C-s> :w<CR>
 autocmd FileType python nnoremap <C-s> :w<CR>:SyntasticCheck<CR>
 autocmd FileType python inoremap <C-s> <Esc>:w<CR>:SyntasticCheck<CR>
 autocmd FileType python vnoremap <C-s> :w<CR>:SyntasticCheck<CR>
+
+" easier moving of code blocks
+vnoremap < <gv " better indentations
+vnoremap > >gv " better indentations
+
+
+" disable stupid swap files and backup files
+set nobackup
+set nowritebackup
+set noswapfile
 
 
 "highlight the search
