@@ -10,8 +10,12 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'fatih/vim-go'
 Plugin 'git://github.com/Valloric/YouCompleteMe.git'
 Plugin 'scrooloose/syntastic'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 Plugin 'Rename'
 Plugin 'git://github.com/will133/vim-dirdiff'
+Plugin 'itchyny/lightline.vim'
+Plugin 'skammer/vim-css-color'
 call vundle#end()
 
 syntax on
@@ -20,7 +24,7 @@ filetype plugin indent on      " Automatically detect file types.
 set rnu
 set nu
 set nolist
-set guifont=DejaVu\ Sans\ Mono\ 12
+set guifont=DejaVu\ Sans\ Mono\ 10
 
 autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
 
@@ -68,6 +72,7 @@ vnoremap <C-s> :w<CR>
 autocmd FileType python nnoremap <C-s> :w<CR>:SyntasticCheck<CR>
 autocmd FileType python inoremap <C-s> <Esc>:w<CR>:SyntasticCheck<CR>
 autocmd FileType python vnoremap <C-s> :w<CR>:SyntasticCheck<CR>
+autocmd FileType javascript setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab
 
 " easier moving of code blocks
 vnoremap < <gv " better indentations
@@ -92,3 +97,15 @@ let python_highlight_all = 1
 "Improve up/down movement on wrapped lines
 nnoremap j gj
 nnoremap k gk
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files
+let g:syntastic_javascript_checkers = ['eslint']
+
+
+" Override eslint with local version where necessary.
+let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
+if matchstr(local_eslint, "^\/\\w") == ''
+  let local_eslint = getcwd() . "/" . local_eslint
+endif
+if executable(local_eslint)
+  let g:syntastic_javascript_eslint_exec = local_eslint
+endif
