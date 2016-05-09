@@ -12,6 +12,9 @@ Plugin 'git://github.com/Valloric/YouCompleteMe.git'
 Plugin 'scrooloose/syntastic'
 Plugin 'Rename'
 Plugin 'git://github.com/will133/vim-dirdiff'
+Plugin 'MattesGroeger/vim-bookmarks'
+Plugin 'tpope/vim-fugitive'
+Plugin 'mxw/vim-jsx'
 call vundle#end()
 
 syntax on
@@ -45,10 +48,17 @@ let g:ycm_complete_in_strings = 1 " Completion in string
 "let g:syntastic_check_on_wq = 1
 let g:syntastic_python_flake8_args="--ignore=W191,E501,E302"
 
+"Disable pylint
+let g:pymode_lint_write = 0
+
 "Control P
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn|pyc)$'
 set wildignore+=*.pyc
 set wildignore+=*.tgz
+
+
+"ESLint 
+let g:syntastic_javascript_checkers = ['eslint']
 
 "-- tab settings -- 
 "goto next tab - note - over writing refresh
