@@ -18,6 +18,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'mxw/vim-jsx'
 Plugin 'itchyny/lightline.vim'
 Plugin 'skammer/vim-css-color'
+Plugin 'scrooloose/nerdtree'
 call vundle#end()
 
 syntax on
@@ -26,8 +27,8 @@ filetype plugin indent on      " Automatically detect file types.
 set rnu
 set nu
 set nolist
-set guifont=DejaVu\ Sans\ Mono\ 10
-
+set guifont=DejaVu\ Sans\ Mono\ 11
+set shell=/bin/bash
 autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
 
 let mapleader=","
@@ -58,7 +59,15 @@ let g:pymode_lint_write = 0
 let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn|pyc)$'
 set wildignore+=*.pyc
 set wildignore+=*.tgz
-
+if exists("g:ctrlp_user_command")
+  unlet g:ctrlp_user_command
+endif
+set wildignore+=*\\node_modules\\**
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](node_modules)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
 
 "ESLint 
 let g:syntastic_javascript_checkers = ['eslint']
@@ -118,3 +127,8 @@ endif
 if executable(local_eslint)
   let g:syntastic_javascript_eslint_exec = local_eslint
 endif
+
+" NerdTree settings
+nmap <leader>n :NERDTreeToggle<cr>
+let NERDTreeIgnore = ['\.pyc$', '\.png$']
+
