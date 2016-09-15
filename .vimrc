@@ -16,12 +16,13 @@ Plugin 'git://github.com/will133/vim-dirdiff'
 Plugin 'MattesGroeger/vim-bookmarks'
 Plugin 'tpope/vim-fugitive'
 Plugin 'mxw/vim-jsx'
-Plugin 'itchyny/lightline.vim'
+" Plugin 'itchyny/lightline.vim'
 Plugin 'skammer/vim-css-color'
 Plugin 'scrooloose/nerdtree'
+Plugin 'bling/vim-airline'
 call vundle#end()
 
-syntax on
+syntax off
 filetype plugin indent on      " Automatically detect file types.
 
 set rnu
