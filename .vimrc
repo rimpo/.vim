@@ -1,36 +1,46 @@
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set rtp+=/usr/local/opt/fzf
+set rtp+=$GOROOT/misc/vim
+call plug#begin('~/.vim/plugged')
+Plug 'VundleVim/Vundle.vim'
+Plug 'tpope/vim-sensible'
+Plug 'fatih/vim-go'
+Plug 'Valloric/YouCompleteMe', { 'do' : '~/.vim/plugged/YouCompleteMe/install.py --gocode-completer --tern-completer' }
+Plug 'git://github.com/will133/vim-dirdiff'
+Plug 'MattesGroeger/vim-bookmarks'
+Plug 'tpope/vim-fugitive'
+Plug 'mxw/vim-jsx'
+Plug 'skammer/vim-css-color'
+Plug 'bling/vim-airline'
+"Theme
+Plug 'jnurmine/Zenburn'
+Plug 'altercation/vim-colors-solarized'
+Plug 'elmcast/elm-vim'
+Plug 'git://github.com/junegunn/fzf.vim'
+"ACK uses AG
+Plug 'mileszs/ack.vim'
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'tpope/vim-sensible'
-Plugin 'rking/ag.vim'
-Plugin 'kien/ctrlp.vim'
-Plugin 'fatih/vim-go'
-Plugin 'git://github.com/Valloric/YouCompleteMe.git'
-Plugin 'scrooloose/syntastic'
-Plugin 'pangloss/vim-javascript'
-Plugin 'Rename'
-Plugin 'git://github.com/will133/vim-dirdiff'
-Plugin 'MattesGroeger/vim-bookmarks'
-Plugin 'tpope/vim-fugitive'
-Plugin 'mxw/vim-jsx'
-" Plugin 'itchyny/lightline.vim'
-Plugin 'skammer/vim-css-color'
-Plugin 'scrooloose/nerdtree'
-Plugin 'bling/vim-airline'
-call vundle#end()
+Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh', 'for' : ['go', 'markdown'] }
+call plug#end()
 
-syntax off
-filetype plugin indent on      " Automatically detect file types.
+filetype plugin indent on
+syntax on
+let python_highlight_all = 1
 
 set rnu
 set nu
 set nolist
 set guifont=DejaVu\ Sans\ Mono\ 11
 set shell=/bin/bash
-autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
+
+" autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
 
 let mapleader=","
 
@@ -64,11 +74,11 @@ if exists("g:ctrlp_user_command")
   unlet g:ctrlp_user_command
 endif
 set wildignore+=*\\node_modules\\**
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](node_modules)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
+" let g:ctrlp_custom_ignore = {
+"  \ 'dir':  '\v[\/](node_modules)$',
+"  \ 'file': '\v\.(exe|so|dll)$',
+"  \ 'link': 'some_bad_symbolic_links'
+"  \ }
 
 "ESLint 
 let g:syntastic_javascript_checkers = ['eslint']
@@ -111,25 +121,58 @@ nnoremap <Esc> :let @/=""<CR>
 "nnoremap <Esc><Esc> :nohls<CR>
 noremap <silent><Leader>/ :nohls<CR>
 
-let python_highlight_all = 1
-
 "Improve up/down movement on wrapped lines
 nnoremap j gj
 nnoremap k gk
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files
-let g:syntastic_javascript_checkers = ['eslint']
 
 
-" Override eslint with local version where necessary.
-let local_eslint = finddir('node_modules', '.;') . '/.bin/eslint'
-if matchstr(local_eslint, "^\/\\w") == ''
-  let local_eslint = getcwd() . "/" . local_eslint
+"Code Formatting
+autocmd FileType python nnoremap <leader>= :0,$!yapf<CR>
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+" Enable folding with the spacebar
+nnoremap <space> za
+
+"Setting Theme
+if has('gui_running')
+  set background=dark
+  colorscheme solarized
+else
+  colorscheme zenburn
 endif
-if executable(local_eslint)
-  let g:syntastic_javascript_eslint_exec = local_eslint
+
+"Enable clipboard in vim
+set clipboard=unnamed
+
+"Sort python Import
+autocmd FileType python nnoremap <leader>i :!isort %<CR><CR>
+
+"TO FIX vim-airline PERFORMANCE PROBLEM 
+if ! has('gui_running')
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
 endif
 
-" NerdTree settings
-nmap <leader>n :NERDTreeToggle<cr>
-let NERDTreeIgnore = ['\.pyc$', '\.png$']
+"enable scrolling in vim 
+set mouse=a
+"fix character insert problem
+nnoremap <esc>^[ <esc>^[
+
+
+" fzf key mapping 
+nmap ; :Buffers<CR>
+nmap <Leader>t :Files<CR>
+nmap <Leader>r :Tags<CR>
+
+" Performance improvments
+set norelativenumber
+
 
