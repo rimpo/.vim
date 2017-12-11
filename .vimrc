@@ -1,6 +1,5 @@
 set nocompatible
 filetype off
-set rtp+=/usr/local/opt/fzf
 set rtp+=$GOROOT/misc/vim
 call plug#begin('~/.vim/plugged')
 Plug 'VundleVim/Vundle.vim'
@@ -17,7 +16,8 @@ Plug 'bling/vim-airline'
 Plug 'jnurmine/Zenburn'
 Plug 'altercation/vim-colors-solarized'
 Plug 'elmcast/elm-vim'
-Plug 'git://github.com/junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 "ACK uses AG
 Plug 'mileszs/ack.vim'
 
