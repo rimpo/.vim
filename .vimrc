@@ -6,9 +6,9 @@ call plug#begin('~/.vim/plugged')
 " General
 Plug 'tpope/vim-sensible'
 Plug 'git://github.com/will133/vim-dirdiff'
-Plug 'MattesGroeger/vim-bookmarks'
 Plug 'tpope/vim-fugitive'
-
+Plug 'mbbill/undotree'
+Plug 'vim-utils/vim-man'
 " Theme
 Plug 'morhetz/gruvbox'
 Plug 'jnurmine/Zenburn'
@@ -24,13 +24,14 @@ Plug 'fatih/vim-go'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh', 'for' : ['go', 'markdown'] }
 Plug 'mxw/vim-jsx'
 Plug 'elmcast/elm-vim'
-
-" Search ACK using ag
-Plug 'mileszs/ack.vim'
-
-" Quick Search
+Plug 'leafgarland/typescript-vim'
+Plug 'vim-syntastic/syntastic'
+"Search or Find
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+"Fast search
+Plug 'jremmen/vim-ripgrep'
 
 call plug#end()
 
@@ -42,6 +43,9 @@ set nobackup
 set nowritebackup
 set noswapfile
 
+set undodir=~/.vim/undodir
+set undofile
+
 " autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -49,6 +53,9 @@ set tabstop=4
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
+set smartindent
+
+set nowrap
 
 let mapleader=","
 
@@ -58,7 +65,7 @@ set clipboard=unnamed
 set rnu
 set nu
 set nolist
-set guifont=DejaVu\ Sans\ Mono\ 11
+set guifont=DejaVu\ Sans\ Mono\ 12
 set shell=/bin/zsh
 
 " Performance improvments
@@ -66,11 +73,16 @@ set shell=/bin/zsh
 
 "highlight the search
 set hlsearch
+set incsearch
 
+set colorcolumn=80
+highlight ColorColumn ctermbg=0 guibg=lightgrey
+
+let python_highlight_all = 1
 "------------------------------- THEME CONFIG ----------------------------------------
 "Setting Theme
 autocmd vimenter * colorscheme gruvbox
-
+set background=dark
 "------------------------------- KEYMAPPING CONFIG----------------------------------------
 
 "clear highlighted search
@@ -88,10 +100,19 @@ nnoremap <C-h> gT
 inoremap <C-h> <Esc>gT
 vnoremap <C-h> gT
 
-" save file shortcut
-nnoremap <C-s> :w<CR>
-inoremap <C-s> <Esc>:w<CR>
-vnoremap <C-s> :w<CR>
+" Navigate window
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>l :wincmd l<CR>
+
+" Toggle undo tree window 
+nnoremap <leader>u :UndotreeToggle<CR>
+
+nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+
+nnoremap <silent> <leader>+ :vertical resize +5<CR>
+nnoremap <silent> <leader>- :vertical resize -5<CR>
 
 " easier moving of code blocks
 vnoremap < <gv " better indentations
@@ -127,7 +148,15 @@ autocmd FileType python nnoremap <leader>= :0,$!yapf<CR>
 
 "Sort python Import
 autocmd FileType python nnoremap <leader>i :!isort %<CR><CR>
+
+"Undo tree shortcut 
+nnoremap <F5> :UndotreeToggle<cr>
 "------------------------------- PLUGIN OTHER CONFIG ----------------------------------------
+
+"Rg
+if executable('rg')
+    let g:rg_derive_root='true'
+endif
 
 " YouCompleteMe
 let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from Ctags file
@@ -135,6 +164,8 @@ let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
 let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language's keyword
 let g:ycm_complete_in_comments = 1 " Completion in comments
 let g:ycm_complete_in_strings = 1 " Completion in string
+" YouCompleteMe disable question to load ycm_extra_conf.py
+let g:ycm_confirm_extra_conf = 0
 
 " Python
 let python_highlight_all = 1
@@ -155,11 +186,17 @@ if exists("g:ctrlp_user_command")
 endif
 set wildignore+=*\\node_modules\\**
 
-"Bookmark setting
-highlight BookmarkSign ctermbg=NONE ctermfg=160
-highlight BookmarkLine ctermbg=194 ctermfg=NONE
-let g:bookmark_sign = '♥'
-let g:bookmark_highlight_lines = 1
+" Synstatic 
+let g:syntastic_python_checkers=['flake8']
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 "------------------------------- PERFORMANCE CONFIG ----------------------------------------
 
 "to fix vim-airline performnce PROBLEM 
