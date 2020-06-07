@@ -9,6 +9,11 @@ Plug 'git://github.com/will133/vim-dirdiff'
 Plug 'tpope/vim-fugitive'
 Plug 'mbbill/undotree'
 Plug 'vim-utils/vim-man'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
+" Database support
+Plug 'joereynolds/SQHell.vim'
+
 " Theme
 Plug 'morhetz/gruvbox'
 Plug 'jnurmine/Zenburn'
@@ -19,6 +24,7 @@ Plug 'bling/vim-airline'
 Plug 'Valloric/YouCompleteMe', { 'do' : '~/.vim/plugged/YouCompleteMe/install.py --gocode-completer --tern-completer' }
 
 " Programming Language support
+Plug 'sheerun/vim-polyglot'
 Plug 'skammer/vim-css-color'
 Plug 'fatih/vim-go'
 Plug 'nsf/gocode', { 'rtp': 'vim', 'do': '~/.vim/plugged/gocode/vim/symlink.sh', 'for' : ['go', 'markdown'] }
@@ -26,13 +32,14 @@ Plug 'mxw/vim-jsx'
 Plug 'elmcast/elm-vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'vim-syntastic/syntastic'
+Plug 'flebel/vim-mypy', { 'for': 'python', 'branch': 'bugfix/fast_parser_is_default_and_only_parser' }
+
 "Search or Find
 "Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 "Fast search
 Plug 'jremmen/vim-ripgrep'
-
 call plug#end()
 
 "------------------------------- INTERNAL CONFIG ----------------------------------------
@@ -42,6 +49,8 @@ syntax on
 set nobackup
 set nowritebackup
 set noswapfile
+set noerrorbells
+set belloff=all
 
 set undodir=~/.vim/undodir
 set undofile
@@ -75,12 +84,21 @@ set shell=/bin/zsh
 set hlsearch
 set incsearch
 
-set colorcolumn=80
+set colorcolumn=100
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
 let python_highlight_all = 1
+
+if has('python') && isdirectory('./venv')
+py << EOF
+import sys
+sys.path.insert(0, './venv/bin/python')
+EOF
+endif
+
 "------------------------------- THEME CONFIG ----------------------------------------
 "Setting Theme
+let g:gruvbox_contrast_dark = 'hard'
 autocmd vimenter * colorscheme gruvbox
 set background=dark
 "------------------------------- KEYMAPPING CONFIG----------------------------------------
@@ -106,7 +124,7 @@ nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 
-" Toggle undo tree window 
+" Toggle undo tree window
 nnoremap <leader>u :UndotreeToggle<CR>
 
 nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
@@ -151,6 +169,12 @@ autocmd FileType python nnoremap <leader>i :!isort %<CR><CR>
 
 "Undo tree shortcut 
 nnoremap <F5> :UndotreeToggle<cr>
+
+
+" Execute sql
+nnoremap <F9> :SQHExecute<CR>
+vnoremap <F9> :SQHExecute<CR>
+
 "------------------------------- PLUGIN OTHER CONFIG ----------------------------------------
 
 "Rg
@@ -167,39 +191,37 @@ let g:ycm_complete_in_strings = 1 " Completion in string
 " YouCompleteMe disable question to load ycm_extra_conf.py
 let g:ycm_confirm_extra_conf = 0
 
-" Python
-let python_highlight_all = 1
-let g:syntastic_python_flake8_args="--ignore=W191,E501,E302"
-
-" Disable pylint
-let g:pymode_lint_write = 0
-
 " Go
 let g:go_fmt_command = "goimports"
 
-" Control P
-let g:ctrlp_custom_ignore='\v[\/]\.(git|hg|svn|pyc)$'
-set wildignore+=*.pyc
-set wildignore+=*.tgz
-if exists("g:ctrlp_user_command")
-  unlet g:ctrlp_user_command
-endif
 set wildignore+=*\\node_modules\\**
 
+" Python
 " Synstatic 
-let g:syntastic_python_checkers=['flake8']
+"let g:syntastic_python_checkers=['flake8']
+let g:syntastic_python_checkers=['flake8', 'pylint']
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+let g:syntastic_python_flake8_args="--ignore=W191,E501,E302"
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 1
+
+let g:sqh_results_limit = 1000
+let g:sqh_results_output = 'smart'
+let g:sqh_provider = 'psql'
+
+" Load json configuration for g:sqh_connections
+source ~/.sqh_database.vim
+
+set statusline+=%{sqhell#Host()}
 "------------------------------- PERFORMANCE CONFIG ----------------------------------------
 
-"to fix vim-airline performnce PROBLEM 
+"to fix vim-airline performnce PROBLEM
 if ! has('gui_running')
   set ttimeoutlen=10
   augroup FastEscape
