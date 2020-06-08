@@ -55,6 +55,13 @@ set belloff=all
 set undodir=~/.vim/undodir
 set undofile
 
+" spell checking
+"set spell
+"setglobal spell spelllang=en_us
+
+" changed for CursorHold - updatetime (default: 4000 ms)
+set updatetime=500
+
 " autocmd FileType python setlocal ts=4 shiftwidth=4 softtabstop=4 noexpandtab
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -66,7 +73,7 @@ set smartindent
 
 set nowrap
 
-let mapleader=","
+let mapleader=" "
 
 "Enable clipboard in vim
 set clipboard=unnamed
@@ -110,27 +117,47 @@ noremap <silent><Leader>/ :nohls<CR>
 
 " tab settings
 " goto next tab - note - over writing refresh
-nnoremap <C-l> gt
-inoremap <C-l> <Esc>gt
-vnoremap <C-l> gt
+nnoremap <leader>l gt
+inoremap <leader>l <Esc>gt
+vnoremap <leader>l gt
 " goto prev tab
-nnoremap <C-h> gT
-inoremap <C-h> <Esc>gT
-vnoremap <C-h> gT
+nnoremap <leader>h gT
+inoremap <leader>h <Esc>gT
+vnoremap <leader>h gT
 
 " Navigate window
-nnoremap <leader>h :wincmd h<CR>
-nnoremap <leader>j :wincmd j<CR>
-nnoremap <leader>k :wincmd k<CR>
-nnoremap <leader>l :wincmd l<CR>
+nnoremap <C-h> :wincmd h<CR>
+inoremap <C-h> <Esc>:wincmd h<CR>
+vnoremap <C-h> :wincmd h<CR>
+
+nnoremap <C-j> :wincmd j<CR>
+inoremap <C-j> <Esc>:wincmd j<CR>
+
+nnoremap <C-k> :wincmd k<CR>
+inoremap <C-k> <Esc>:wincmd k<CR>
+
+nnoremap <C-l> :wincmd l<CR>
+inoremap <C-l> <Esc>:wincmd l<CR>
+
+" Size of window
+nnoremap <leader><Up> :resize +5<CR>
+inoremap <leader><Up> :resize +5<CR>
+nnoremap <leader><Down> :resize -5<CR>
+inoremap <leader><Down> :resize -5<CR>
+
+nnoremap <leader><Left> :vertical resize -5<CR>
+inoremap <leader><Left> :vertical resize -5<CR>
+nnoremap <leader><Right> :vertical resize +5<CR>
+inoremap <leader><Right> :vertical resize +5<CR>
 
 " Toggle undo tree window
 nnoremap <leader>u :UndotreeToggle<CR>
 
-nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+" Open File window 
+nnoremap <leader>1 :Lex! <bar> :vertical resize 40<CR>
 
-nnoremap <silent> <leader>+ :vertical resize +5<CR>
-nnoremap <silent> <leader>- :vertical resize -5<CR>
+" Open copen window
+nnoremap <leader>2 :copen<CR>
 
 " easier moving of code blocks
 vnoremap < <gv " better indentations
@@ -144,9 +171,6 @@ nnoremap k gk
 set foldmethod=indent
 set foldlevel=99
 
-" Enable folding with the spacebar
-nnoremap <space> za
-
 "enable scrolling in vim 
 set mouse=a
 "fix character insert problem
@@ -156,24 +180,24 @@ nnoremap <esc>^[ <esc>^[
 " fzf key mapping 
 nmap ; :Buffers<CR>
 nmap <Leader>t :Files<CR>
-nmap <Leader>r :Tags<CR>
+
+" Search All files
+nnoremap <Leader>f :Rg<CR>
 
 " YouCompleteMe
 nnoremap <F12> :YcmCompleter GoToDeclaration<CR>
+nnoremap <F10> :YcmCompleter GoToReferences<CR>
 
 " Code Formatting
 autocmd FileType python nnoremap <leader>= :0,$!yapf<CR>
-
-"Sort python Import
-autocmd FileType python nnoremap <leader>i :!isort %<CR><CR>
 
 "Undo tree shortcut 
 nnoremap <F5> :UndotreeToggle<cr>
 
 
 " Execute sql
-nnoremap <F9> :SQHExecute<CR>
-vnoremap <F9> :SQHExecute<CR>
+autocmd FileType sql nnoremap <F9> :SQHExecute<CR>
+autocmd FileType sql vnoremap <F9> :SQHExecute<CR>
 
 "------------------------------- PLUGIN OTHER CONFIG ----------------------------------------
 
@@ -200,6 +224,8 @@ set wildignore+=*\\node_modules\\**
 " Synstatic 
 "let g:syntastic_python_checkers=['flake8']
 let g:syntastic_python_checkers=['flake8', 'pylint']
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nnoremap <C-w>E :SyntasticCheck<CR> 
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -209,7 +235,7 @@ let g:syntastic_python_flake8_args="--ignore=W191,E501,E302"
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
+let g:syntastic_check_on_wq = 0
 
 let g:sqh_results_limit = 1000
 let g:sqh_results_output = 'smart'
@@ -218,7 +244,10 @@ let g:sqh_provider = 'psql'
 " Load json configuration for g:sqh_connections
 source ~/.sqh_database.vim
 
-set statusline+=%{sqhell#Host()}
+"set statusline+=%{sqhell#Host()}
+
+" Run mypy on python file save
+"autocmd BufWritePost *.py :Mypy
 "------------------------------- PERFORMANCE CONFIG ----------------------------------------
 
 "to fix vim-airline performnce PROBLEM
