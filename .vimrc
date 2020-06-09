@@ -223,9 +223,10 @@ set wildignore+=*\\node_modules\\**
 " Python
 " Synstatic 
 "let g:syntastic_python_checkers=['flake8']
-let g:syntastic_python_checkers=['flake8', 'pylint']
+let g:syntastic_python_checkers=['flake8', 'pylint',]
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <C-w>E :SyntasticCheck<CR> 
+nnoremap <leader>9 :SyntasticCheck<CR> 
+nnoremap <leader>8 :Mypy<CR> 
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
