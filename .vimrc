@@ -12,7 +12,7 @@ Plug 'vim-utils/vim-man'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " Database support
-Plug 'joereynolds/SQHell.vim'
+Plug 'vim-scripts/dbext.vim'
 
 " Theme
 Plug 'morhetz/gruvbox'
@@ -153,7 +153,7 @@ inoremap <leader><Right> :vertical resize +5<CR>
 " Toggle undo tree window
 nnoremap <leader>u :UndotreeToggle<CR>
 
-" Open File window 
+"open explorer window
 nnoremap <leader>1 :Lex! <bar> :vertical resize 40<CR>
 
 " Open copen window
@@ -196,8 +196,13 @@ nnoremap <F5> :UndotreeToggle<cr>
 
 
 " Execute sql
-autocmd FileType sql nnoremap <F9> :SQHExecute<CR>
-autocmd FileType sql vnoremap <F9> :SQHExecute<CR>
+autocmd FileType sql nnoremap <F9> :DBExecSQLUnderCursor<CR>
+autocmd FileType sql vnoremap <F9> :DBExecVisualSQL<CR>
+
+" Type a replacement term and press . to repeat the replacement again. Useful
+" for replacing a few instances of the term (comparable to multiple cursors).
+nnoremap <silent> s* :let @/='\<'.expand('<cword>').'\>'<CR>cgn
+xnoremap <silent> s* "sy:let @/=@s<CR>cgn
 
 "------------------------------- PLUGIN OTHER CONFIG ----------------------------------------
 
@@ -238,17 +243,20 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 
-let g:sqh_results_limit = 1000
-let g:sqh_results_output = 'smart'
-let g:sqh_provider = 'psql'
-
-" Load json configuration for g:sqh_connections
-source ~/.sqh_database.vim
+" Load configuration for database 
+source ~/.database.vim
 
 "set statusline+=%{sqhell#Host()}
 
 " Run mypy on python file save
 "autocmd BufWritePost *.py :Mypy
+
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 25
+
 "------------------------------- PERFORMANCE CONFIG ----------------------------------------
 
 "to fix vim-airline performnce PROBLEM
